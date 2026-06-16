@@ -6,7 +6,7 @@ require (
 	github.com/coder/websocket v1.8.14
 	github.com/godbus/dbus/v5 v5.2.2
 	github.com/teemow/midi-device v0.1.0
-	gitlab.com/gomidi/midi/v2 v2.3.23
+	gitlab.com/gomidi/midi/v2 v2.3.24
 	golang.org/x/sys v0.46.0
 )
 
