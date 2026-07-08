@@ -12,8 +12,8 @@ import (
 
 	"github.com/coder/websocket"
 
-	"github.com/teemow/midi-transport/midicontrol"
 	"github.com/teemow/midi-transport"
+	"github.com/teemow/midi-transport/midicontrol"
 )
 
 func TestID(t *testing.T) {
