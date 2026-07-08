@@ -8,6 +8,7 @@ jobs:
     uses: teemow/github-workflows/.github/workflows/ci-go.yml@main
     with:
       runs-on: ubuntu-latest
+      apt-packages: libasound2-dev
   gitleaks:
     uses: teemow/github-workflows/.github/workflows/gitleaks.yml@main
     with:
