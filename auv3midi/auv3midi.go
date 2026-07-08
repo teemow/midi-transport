@@ -14,8 +14,8 @@ package auv3midi
 import (
 	"context"
 
-	"github.com/teemow/midi-transport/midicontrol"
 	"github.com/teemow/midi-transport"
+	"github.com/teemow/midi-transport/midicontrol"
 )
 
 // ID is the transport id device types declare to route over the brain channel.
