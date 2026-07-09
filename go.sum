@@ -2,8 +2,8 @@ github.com/coder/websocket v1.8.15 h1:6B2JPeOGlpff2Uz6vOEH1Vzpi0iUz20A+lPVhPHtNU
 github.com/coder/websocket v1.8.15/go.mod h1:NX3SzP+inril6yawo5CQXx8+fk145lPDC6pumgx0mVg=
 github.com/godbus/dbus/v5 v5.2.2 h1:TUR3TgtSVDmjiXOgAAyaZbYmIeP3DPkld3jgKGV8mXQ=
 github.com/godbus/dbus/v5 v5.2.2/go.mod h1:3AAv2+hPq5rdnr5txxxRwiGjPXamgoIHgz9FPBfOp3c=
-github.com/teemow/midi-device v0.1.0 h1:qTNfsPcgEgqt4cClDv+tYWAiA4WEdxpT7V4w7lRA4JY=
-github.com/teemow/midi-device v0.1.0/go.mod h1:pLwP3pDlGDZSQgq7taL6Je840wOBt8MvwPfAdNFeb/Y=
+github.com/teemow/midi-device v0.2.0 h1:XrIzmHDS1XND78g8AWrDQ0UQFRFuFiqogeq3thpm3QA=
+github.com/teemow/midi-device v0.2.0/go.mod h1:pLwP3pDlGDZSQgq7taL6Je840wOBt8MvwPfAdNFeb/Y=
 gitlab.com/gomidi/midi/v2 v2.3.24 h1:afkq5nhlzKvZaj9QK80YbK8tH3lIlKLnPPP9HxxD7Do=
 gitlab.com/gomidi/midi/v2 v2.3.24/go.mod h1:jDpP4O4skYi+7iVwt6Zyp18bd2M4hkjtMuw2cmgKgfw=
 golang.org/x/sys v0.47.0 h1:o7XGOvZQCADBQQ4Y7VNq2dRWQR7JmOUW8Kxx4ZsNgWs=
