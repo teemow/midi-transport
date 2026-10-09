@@ -7,7 +7,7 @@ require (
 	github.com/godbus/dbus/v5 v5.2.2
 	github.com/teemow/midi-device v0.2.0
 	gitlab.com/gomidi/midi/v2 v2.3.24
-	golang.org/x/sys v0.48.0
+	golang.org/x/sys v0.49.0
 )
 
 require gopkg.in/yaml.v3 v3.0.1 // indirect
