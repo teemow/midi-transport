@@ -90,7 +90,7 @@ func handleProbe(outDir string, onStaged func(device.ProbeDump, Result)) http.Ha
 
 		id := device.ProbeID(dump)
 		if id == "" {
-			resp.Error(w, http.StatusBadRequest, "dump has no id source (empty component.subtype and name)")
+			resp.Error(w, http.StatusBadRequest, "dump has no id source (empty component type, subtype and name)")
 			return
 		}
 

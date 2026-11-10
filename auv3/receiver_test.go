@@ -49,11 +49,11 @@ func TestHandlerStagesDumpAndNotifies(t *testing.T) {
 	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
 		t.Fatalf("decode response: %v", err)
 	}
-	if res.ID != "dely" || res.Params != 2 || res.Writable != 2 {
-		t.Fatalf("response = %+v, want id=dely params=2 writable=2", res)
+	if res.ID != "aufx-dely-appl" || res.Params != 2 || res.Writable != 2 {
+		t.Fatalf("response = %+v, want id=aufx-dely-appl params=2 writable=2", res)
 	}
 
-	staged := filepath.Join(dir, "dely.json")
+	staged := filepath.Join(dir, "aufx-dely-appl.json")
 	if _, err := os.Stat(staged); err != nil {
 		t.Fatalf("expected staged file %s: %v", staged, err)
 	}
@@ -110,7 +110,7 @@ func TestHandlerPreservesRichMetadata(t *testing.T) {
 		t.Fatalf("status = %d, want 200", resp.StatusCode)
 	}
 
-	b, err := os.ReadFile(filepath.Join(dir, "verb.json"))
+	b, err := os.ReadFile(filepath.Join(dir, "aumf-verb-appl.json"))
 	if err != nil {
 		t.Fatalf("read staged: %v", err)
 	}
@@ -195,11 +195,11 @@ func TestHandlerAcceptsEmptyParamDump(t *testing.T) {
 	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
 		t.Fatalf("decode response: %v", err)
 	}
-	if res.ID != "util" || res.Params != 0 || res.Writable != 0 {
-		t.Fatalf("response = %+v, want id=util params=0 writable=0", res)
+	if res.ID != "aufx-util-appl" || res.Params != 0 || res.Writable != 0 {
+		t.Fatalf("response = %+v, want id=aufx-util-appl params=0 writable=0", res)
 	}
-	if _, err := os.Stat(filepath.Join(dir, "util.json")); err != nil {
-		t.Fatalf("expected staged file util.json: %v", err)
+	if _, err := os.Stat(filepath.Join(dir, "aufx-util-appl.json")); err != nil {
+		t.Fatalf("expected staged file aufx-util-appl.json: %v", err)
 	}
 }
 
@@ -242,5 +242,61 @@ func TestHandlerStoresDiagnosticsReport(t *testing.T) {
 	entries, err := os.ReadDir(filepath.Join(dir, "_diagnostics"))
 	if err != nil || len(entries) != 1 {
 		t.Fatalf("expected one diagnostics file, got %v (err %v)", entries, err)
+	}
+}
+
+// TestHandlerStagesUnitsSharingASubtypeSeparately posts audio units that share
+// a subtype (another type, another manufacturer, the subtype in other letter
+// case). Each gets its own staged file; keyed by subtype alone, the later
+// dumps overwrote the first.
+func TestHandlerStagesUnitsSharingASubtypeSeparately(t *testing.T) {
+	dir := t.TempDir()
+	ts := httptest.NewServer(Handler(dir, nil))
+	defer ts.Close()
+
+	units := map[string]string{
+		"aumu-_ab12-_xy_zw":  `{"component": {"type": "aumu", "subtype": "Ab12", "manufacturer": "XyZw"}, "name": "Synth", "parameters": []}`,
+		"aumi-_ab12-_xy_zw":  `{"component": {"type": "aumi", "subtype": "Ab12", "manufacturer": "XyZw"}, "name": "Synth MIDI", "parameters": []}`,
+		"aumu-_ab12-acme":    `{"component": {"type": "aumu", "subtype": "Ab12", "manufacturer": "acme"}, "name": "Other Synth", "parameters": []}`,
+		"aumu-_a_b12-_xy_zw": `{"component": {"type": "aumu", "subtype": "AB12", "manufacturer": "XyZw"}, "name": "Synth (old)", "parameters": []}`,
+	}
+	for want, body := range units {
+		resp, err := http.Post(ts.URL+"/auv3-probe", "application/json", strings.NewReader(body))
+		if err != nil {
+			t.Fatalf("POST: %v", err)
+		}
+		var res Result
+		err = json.NewDecoder(resp.Body).Decode(&res)
+		_ = resp.Body.Close()
+		if err != nil {
+			t.Fatalf("decode response: %v", err)
+		}
+		if res.ID != want {
+			t.Fatalf("id = %q, want %q", res.ID, want)
+		}
+	}
+
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(entries) != len(units) {
+		t.Fatalf("staged %d files, want %d", len(entries), len(units))
+	}
+	for want, body := range units {
+		b, err := os.ReadFile(filepath.Join(dir, want+".json"))
+		if err != nil {
+			t.Fatalf("read %s: %v", want, err)
+		}
+		var staged, posted device.ProbeDump
+		if err := json.Unmarshal(b, &staged); err != nil {
+			t.Fatal(err)
+		}
+		if err := json.Unmarshal([]byte(body), &posted); err != nil {
+			t.Fatal(err)
+		}
+		if staged.Name != posted.Name {
+			t.Fatalf("%s.json holds %q, want %q", want, staged.Name, posted.Name)
+		}
 	}
 }
