@@ -17,7 +17,7 @@ const agentPath = dbus.ObjectPath("/midi/mcp/agent")
 // agent be present and to gracefully accept the edge cases (legacy PIN,
 // passkey, service authorization) without a human in the loop.
 //
-// The daemon is a local, single-user process; auto-accepting is the intended
+// The server is a local, single-user process; auto-accepting is the intended
 // behaviour (the user explicitly asked to pair a known dongle).
 type pairingAgent struct{}
 

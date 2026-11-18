@@ -8,7 +8,7 @@
 // midicontrol.Command and pushed to the connected brain, which re-emits it on
 // its host MIDI-out inside AUM. The channel is outbound-only — there is no
 // inbound MIDI from the brain — so Listen yields no events, and Connect/Pair are
-// no-ops (the brain dials the daemon, not the other way round).
+// no-ops (the brain dials the server, not the other way round).
 package auv3midi
 
 import (
@@ -64,7 +64,7 @@ func (t *Transport) Discover(ctx context.Context) ([]transport.Endpoint, error) 
 // Pair is a no-op: the brain channel has no pairing.
 func (t *Transport) Pair(ctx context.Context, endpointID string) error { return nil }
 
-// Connect is a no-op: the brain dials the daemon (the hub registers the
+// Connect is a no-op: the brain dials the server (the hub registers the
 // connection from the LAN receiver), so there is nothing to open here. Send
 // surfaces midicontrol.ErrNoBrain when nothing is connected.
 func (t *Transport) Connect(ctx context.Context, endpointID string) error { return nil }

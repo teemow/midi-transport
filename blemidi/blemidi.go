@@ -104,7 +104,7 @@ func WithDiscoverTimeout(d time.Duration) Option {
 }
 
 // New returns a BLE-MIDI transport bound to the default BlueZ adapter. It does
-// not touch D-Bus until the first BLE operation (so the daemon starts on hosts
+// not touch D-Bus until the first BLE operation (so the server starts on hosts
 // without BlueZ, and the package tests need no system bus).
 func New(opts ...Option) (*Transport, error) {
 	t := &Transport{

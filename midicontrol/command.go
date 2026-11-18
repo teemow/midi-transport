@@ -1,16 +1,16 @@
 package midicontrol
 
-// ControlSurfaceType is the frame type of the daemon→brain control-surface
+// ControlSurfaceType is the frame type of the server→brain control-surface
 // manifest. The brain silently drops frame types it does not know, so pushing
 // it to an older brain is backward-compatible.
 const ControlSurfaceType = "controlSurface"
 
-// ControlSurface is the daemon→brain manifest frame describing the current
+// ControlSurface is the server→brain manifest frame describing the current
 // session rig as a renderable control surface: one entry per session-derived
 // device, each carrying the controls' widget kinds and the exact MIDI message
 // (type/channel/number) the session mapping stores. The brain caches it in the
 // AU fullState and renders it in its plugin UI, emitting the messages locally —
-// so the surface keeps working when the daemon goes offline.
+// so the surface keeps working when the server goes offline.
 type ControlSurface struct {
 	Type string `json:"type"` // always ControlSurfaceType
 
@@ -21,11 +21,11 @@ type ControlSurface struct {
 
 	Devices []SurfaceDevice `json:"devices"`
 
-	// Sessions is the daemon's session-switch registry: one entry per staged
+	// Sessions is the server's session-switch registry: one entry per staged
 	// session pinned to a Program Change on the reserved session-switch
 	// channel. The brain renders it as a switcher row; a tap emits the PC
 	// locally (AUM's hand-mapped global "Session Load" action fires) and sends
-	// a sessionSwitch frame upstream so the daemon re-syncs. Present on every
+	// a sessionSwitch frame upstream so the server re-syncs. Present on every
 	// push, so the switcher is fullState-cached in every registered session.
 	Sessions []SurfaceSession `json:"sessions,omitempty"`
 }
@@ -36,7 +36,7 @@ type SurfaceSession struct {
 	Name    string `json:"name"`
 	Program int    `json:"program"`
 	Channel int    `json:"channel"` // 1-based, like SurfaceMsg.Channel
-	// Current marks the daemon's current session (the one this manifest was
+	// Current marks the server's current session (the one this manifest was
 	// derived from / last switched to).
 	Current bool `json:"current,omitempty"`
 }

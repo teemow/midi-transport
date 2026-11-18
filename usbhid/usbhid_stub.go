@@ -2,7 +2,7 @@
 
 // Package usbhid's non-Linux stub. The real backend (usbhid.go) reads/writes
 // Linux hidraw nodes (/sys/class/hidraw + /dev/hidrawN), which only exist on
-// Linux; on other platforms the transport is present but inert so the daemon
+// Linux; on other platforms the transport is present but inert so the server
 // still starts (vendor-HID readback is a Linux-only path). Pair/Disconnect are
 // inert no-ops as on the real backend; the data-path operations report that
 // hidraw is unavailable.
