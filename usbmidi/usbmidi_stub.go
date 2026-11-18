@@ -2,7 +2,7 @@
 
 // Package usbmidi's pure-Go (CGO_ENABLED=0) stub. The real backend (usbmidi.go)
 // links libasound via the gomidi rtmidi driver and therefore requires CGO; in a
-// CGO-less build the transport is present but inert so the daemon still starts
+// CGO-less build the transport is present but inert so the server still starts
 // (USB is the bonus/verification path, not the primary one). Production release
 // builds set CGO_ENABLED=1, so the real backend is the one normally compiled.
 package usbmidi

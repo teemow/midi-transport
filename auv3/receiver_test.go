@@ -209,7 +209,7 @@ func TestHandlerStoresDiagnosticsReport(t *testing.T) {
 	defer ts.Close()
 
 	body := `{
-		"app": "auv3-probe 1.1.0",
+		"app": "stagebox 1.1.0",
 		"device": {"model": "iPad", "systemName": "iPadOS", "systemVersion": "26.0"},
 		"results": [
 			{"id": "isem", "name": "iSEM", "status": "sent", "params": 40, "writable": 38},

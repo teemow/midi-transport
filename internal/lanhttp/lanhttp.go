@@ -4,7 +4,7 @@
 // "bound the resources a slow/hostile client can tie up" and "log the cause,
 // return only a generic status" rules.
 //
-// ponytail: deliberately duplicated from mcp-midi-controller's internal/lanhttp
+// ponytail: deliberately duplicated from roadie's internal/lanhttp
 // rather than carved into a fourth shared module. The app keeps its own copy for
 // its app-only receivers (aumreceiver, audiotap, diagnostics); only the auv3
 // receiver moved here. Upgrade path if these diverge or a third consumer

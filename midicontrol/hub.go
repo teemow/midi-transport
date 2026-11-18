@@ -1,16 +1,16 @@
 // Package midicontrol is the off-MCP LAN listener that terminates the
-// ProbeMidiBrain control channel (github.com/teemow/auv3-probe) and lets an
+// ProbeMidiBrain control channel (github.com/teemow/stagebox) and lets an
 // agent push MIDI into the rig — notes, CC, program change and transport — by
 // having the brain AUv3 emit them on its host MIDI-out at render time.
 //
 // It is the symmetric counterpart of internal/audiotap: where the audio tap is
-// the agent's "ears" (an inbound stream the daemon receives), the MIDI control
-// channel is the agent's "hands" (an outbound stream the daemon pushes). Both
+// the agent's "ears" (an inbound stream the server receives), the MIDI control
+// channel is the agent's "hands" (an outbound stream the server pushes). Both
 // are SEPARATE listeners from the loopback-only MCP endpoint (the iPad cannot
-// reach loopback) and both reuse the iPad app's DaemonClient/webSocketURL.
+// reach loopback) and both reuse the iPad app's ServerClient/webSocketURL.
 //
-// The brain is the WebSocket *client* (it dials the daemon, like the tap), so
-// the daemon holds at most one live connection and writes command frames to it.
+// The brain is the WebSocket *client* (it dials the server, like the tap), so
+// the server holds at most one live connection and writes command frames to it.
 // Nothing is written to disk; the channel is volatile rig control.
 package midicontrol
 

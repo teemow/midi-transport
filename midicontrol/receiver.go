@@ -16,27 +16,27 @@ import (
 // stops a hostile LAN client from forcing a huge allocation per read.
 const maxMessageBytes = 1 << 16
 
-// SessionSwitchType is the frame type of the brain→daemon session-switch
+// SessionSwitchType is the frame type of the brain→server session-switch
 // notification: the brain's switcher row was tapped (the brain already emitted
-// the Program Change into AUM locally), and the daemon should follow — resolve
+// the Program Change into AUM locally), and the server should follow — resolve
 // the program via its session-switch registry, update the current session and
 // re-import. The only inbound frame type currently decoded; everything else is
 // drained and ignored.
 const SessionSwitchType = "sessionSwitch"
 
-// sessionSwitchFrame is the brain→daemon wire shape:
+// sessionSwitchFrame is the brain→server wire shape:
 // {"type":"sessionSwitch","program":N}.
 type sessionSwitchFrame struct {
 	Type    string `json:"type"`
 	Program int    `json:"program"`
 }
 
-// Callbacks are the daemon-side hooks the midi-control receiver dispatches.
+// Callbacks are the server-side hooks the midi-control receiver dispatches.
 // Every field may be nil; none of them may block (run real work in a
 // goroutine).
 type Callbacks struct {
 	// OnConnect / OnDisconnect notify that the brain (the agent's "hands")
-	// came or went, so the daemon can tell connected MCP clients.
+	// came or went, so the server can tell connected MCP clients.
 	OnConnect    func(remote string)
 	OnDisconnect func(remote string)
 	// OnSessionSwitch receives the program of each inbound sessionSwitch
@@ -49,25 +49,25 @@ type Callbacks struct {
 //
 // Route:
 //
-//	GET /midi-control   ProbeMidiBrain control channel (daemon -> brain commands)
+//	GET /midi-control   ProbeMidiBrain control channel (server -> brain commands)
 func Register(mux *http.ServeMux, hub *Hub, cb Callbacks) {
 	mux.HandleFunc("/midi-control", handleControl(hub, cb))
 }
 
 // handleControl upgrades to a WebSocket, registers the connection with the hub
 // (so MCP tools can push command frames to it), and then blocks reading until
-// the brain disconnects or the daemon shuts down. The brain is mostly a command
+// the brain disconnects or the server shuts down. The brain is mostly a command
 // sink: inbound TEXT/BINARY frames are drained (the read is what keeps the
 // connection alive and detects loss), with one exception — sessionSwitch frames
 // are decoded and dispatched to cb.OnSessionSwitch so a brain-side session
-// switch keeps the daemon in sync. Unknown frame types stay ignored (reserved
+// switch keeps the server in sync. Unknown frame types stay ignored (reserved
 // for future acks).
 func handleControl(hub *Hub, cb Callbacks) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Clear the shared lanhttp absolute deadlines before upgrading, exactly
 		// like internal/audiotap: a long-lived control channel must not be
 		// dropped after the receiver's 60s Read/WriteTimeout. The loop is bound
-		// by r.Context() (cancelled on disconnect / daemon shutdown) instead.
+		// by r.Context() (cancelled on disconnect / server shutdown) instead.
 		rc := http.NewResponseController(w)
 		_ = rc.SetReadDeadline(time.Time{})
 		_ = rc.SetWriteDeadline(time.Time{})

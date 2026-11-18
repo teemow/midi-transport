@@ -1,10 +1,10 @@
 // Package auv3receiver is the off-MCP LAN listener that ingests AUv3
-// parameter-tree dumps POSTed by the auv3-probe iPad app
-// (github.com/teemow/auv3-probe) and stages them on disk for the
+// parameter-tree dumps POSTed by the stagebox iPad app
+// (github.com/teemow/stagebox) and stages them on disk for the
 // list_auv3_probes / get_auv3_probe / import_auv3_probe tools.
 //
-// It is deliberately a SEPARATE HTTP listener from the daemon's MCP endpoint.
-// The MCP endpoint is loopback-only (enforced in cmd/mcp-midi-controller), so
+// It is deliberately a SEPARATE HTTP listener from the server's MCP endpoint.
+// The MCP endpoint is loopback-only (enforced in cmd/roadie), so
 // the iPad cannot POST to it; this receiver must bind the LAN instead. Its
 // surface is intentionally tiny and write-only: it validates a dump and writes
 // <ProbeID>.json into the staging dir. It never touches the engine, transports,
@@ -27,7 +27,7 @@ import (
 var resp = lanhttp.Responder{Prefix: "auv3-probe receiver"}
 
 // maxBodyBytes bounds a single request body. The receiver binds the LAN, so an
-// unbounded JSON body would let any host on the network drive the daemon out of
+// unbounded JSON body would let any host on the network drive the server out of
 // memory. A few MiB is generous for a parameter-tree dump or a probe-run report.
 const maxBodyBytes = 8 << 20 // 8 MiB
 
@@ -41,7 +41,7 @@ type Result struct {
 	Staged   string `json:"staged"`
 }
 
-// Register adds the probe receiver's routes (NOT /healthz) to mux. The daemon
+// Register adds the probe receiver's routes (NOT /healthz) to mux. The server
 // uses this to mount the probe surface alongside the AUM-session surface on one
 // shared LAN listener; Handler wraps it for standalone use.
 //
@@ -56,7 +56,7 @@ func Register(mux *http.ServeMux, outDir string, onStaged func(device.ProbeDump,
 
 // Handler builds the standalone receiver: the probe routes plus a /healthz
 // liveness endpoint. Dumps are staged in outDir. If onStaged is non-nil it is
-// invoked (synchronously) after each dump is written, e.g. so the daemon can
+// invoked (synchronously) after each dump is written, e.g. so the server can
 // notify connected MCP clients that new data arrived.
 func Handler(outDir string, onStaged func(device.ProbeDump, Result)) http.Handler {
 	mux := http.NewServeMux()

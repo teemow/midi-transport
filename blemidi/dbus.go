@@ -25,7 +25,7 @@ const (
 
 // ensureBus lazily connects to the system D-Bus, powers the adapter on, and
 // registers the pairing agent. It is a no-op once connected. Connecting lazily
-// (rather than in New) lets the daemon start, and the package tests run, on
+// (rather than in New) lets the server start, and the package tests run, on
 // hosts without BlueZ; the connection is only required when BLE is actually
 // used.
 func (t *Transport) ensureBus() error {

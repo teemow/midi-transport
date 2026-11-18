@@ -1,7 +1,7 @@
 # midi-transport
 
 MIDI/OSC transport backends extracted from
-[mcp-midi-controller](https://github.com/teemow/mcp-midi-controller). This is the
+[roadie](https://github.com/teemow/roadie). This is the
 IO layer: the pluggable `Transport` interface and its implementations (OSC over
 UDP, USB MIDI via ALSA, vendor USB HID, BLE-MIDI over BlueZ/D-Bus, and the AUv3
 bridge), plus the off-MCP control hub and the LAN probe-dump receiver.
@@ -33,7 +33,7 @@ go get github.com/teemow/midi-transport
   WebSocket hub.
 - `transport/midicontrol` — the off-MCP WebSocket hub the AUv3 brain dials in to.
 - `transport/auv3` — the LAN listener that ingests AUv3 parameter-tree dumps
-  POSTed by the [auv3-probe](https://github.com/teemow/auv3-probe) iPad app.
+  POSTed by the [stagebox](https://github.com/teemow/stagebox) iPad app.
 
 Platform note: the BLE-MIDI and USB-HID/USB-MIDI backends are Linux/cgo
 specific and ship build-tagged stubs, so cross-platform and kernel-only

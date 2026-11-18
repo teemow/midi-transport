@@ -101,7 +101,7 @@ func TestHubPushesCommands(t *testing.T) {
 
 // TestHubSendJSONControlSurface pushes a controlSurface manifest frame through
 // the hub and asserts the brain-side client receives it verbatim — the
-// daemon→brain manifest path used after every session-rig (auto-)import.
+// server→brain manifest path used after every session-rig (auto-)import.
 func TestHubSendJSONControlSurface(t *testing.T) {
 	hub := NewHub()
 	mux := http.NewServeMux()
@@ -177,10 +177,10 @@ func TestHubSendJSONControlSurface(t *testing.T) {
 	}
 }
 
-// TestReceiverDispatchesSessionSwitchFrames sends brain→daemon frames and
+// TestReceiverDispatchesSessionSwitchFrames sends brain→server frames and
 // asserts only well-formed sessionSwitch frames reach the callback — the
 // upstream half of the cross-session switcher (the brain emitted the PC into
-// AUM locally and tells the daemon to follow).
+// AUM locally and tells the server to follow).
 func TestReceiverDispatchesSessionSwitchFrames(t *testing.T) {
 	hub := NewHub()
 	programs := make(chan int, 4)
